@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+
+  smtp_app:
+    container_name: smtp
+    build:
+      ./
+    command: python main.py
+    ports:
+      - "5000:5000"
+    networks:
+      - rabbit
+
+networks:
+    rabbit:
+      external: true
+
+volumes:
+  database:

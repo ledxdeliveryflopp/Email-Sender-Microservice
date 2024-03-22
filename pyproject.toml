@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "smtp microservice"
+version = "0.1"
+description = "Microservice for email sender"
+authors = ["LedxDeliveryFlopp <korstim18@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aio-pika = "^9.4.1"
+pydantic-settings = "^2.2.1"
+schedule = "^1.2.1"
+aioschedule = "0.5.2"
+apscheduler = "^3.10.4"
+fastapi = {extras = ["all"], version = "^0.110.0"}
+pydantic = "^2.6.4"
+jinja2 = "^3.1.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
