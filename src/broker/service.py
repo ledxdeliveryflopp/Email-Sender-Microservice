@@ -21,3 +21,22 @@ async def get_user_email_from_broker():
             return incoming_message.body
         except QueueEmpty:
             return None
+
+
+async def get_password_change_code_from_broker():
+    connection = await aio_pika.connect_robust(url=settings.broker_settings.broker_full_url)
+
+    queue_name = "change_password_codes"
+
+    async with connection:
+        channel = await connection.channel()
+
+        await channel.set_qos(prefetch_count=5)
+
+        queue = await channel.declare_queue(queue_name)
+        try:
+            incoming_message = await queue.get(timeout=5)
+            await incoming_message.ack()
+            return incoming_message.body
+        except QueueEmpty:
+            return None
