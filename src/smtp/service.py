@@ -21,6 +21,7 @@ class SMTPEmailService:
                 "sender_email": f"Почта для связи с техподдержкой - {sender_email}"}
         email_content = jinja_template.render(data)
         msg = MIMEMultipart()
+        msg['Subject'] = "Завершена регистрация"
         msg.attach(MIMEText(email_content, "html"))
         return msg
 
