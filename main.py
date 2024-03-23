@@ -1,14 +1,19 @@
 import asyncio
 import time
-from src.smtp.service import send_message, send_password_change_code
+from src.broker.service import BrokerService
+from src.password.service import PasswordEmailService
+from src.settings.settings import settings
+from src.smtp.service import SMTPEmailService
 
 
 async def send():
-    await send_message()
+    sender = SMTPEmailService(broker=BrokerService(broker_url=settings.broker_settings.broker_full_url))
+    await sender.send_message()
 
 
 async def send_verify_code():
-    await send_password_change_code()
+    sender = PasswordEmailService(broker=BrokerService(broker_url=settings.broker_settings.broker_full_url))
+    await sender.send_password_change_code()
 
 while True:
     asyncio.run(send())

@@ -1,42 +1,47 @@
+from dataclasses import dataclass
 import aio_pika
 from aio_pika.exceptions import QueueEmpty
 from src.settings.settings import settings
 
 
-async def get_user_email_from_broker():
-    """Получить данные из RabbitMQ"""
-    connection = await aio_pika.connect_robust(url=settings.broker_settings.broker_full_url)
+@dataclass
+class BrokerService:
+    broker_url: settings.broker_settings.broker_full_url
 
-    queue_name = "email_register_queue"
+    async def get_user_email_from_broker(self):
+        """Получить email из RabbitMQ"""
+        connection = await aio_pika.connect_robust(url=self.broker_url)
 
-    async with connection:
-        channel = await connection.channel()
+        queue_name = "email_register_queue"
 
-        await channel.set_qos(prefetch_count=5)
+        async with connection:
+            channel = await connection.channel()
 
-        queue = await channel.declare_queue(queue_name)
-        try:
-            incoming_message = await queue.get(timeout=5)
-            await incoming_message.ack()
-            return incoming_message.body
-        except QueueEmpty:
-            return None
+            await channel.set_qos(prefetch_count=5)
 
+            queue = await channel.declare_queue(queue_name)
+            try:
+                incoming_message = await queue.get(timeout=5)
+                await incoming_message.ack()
+                return incoming_message.body
+            except QueueEmpty:
+                return None
 
-async def get_password_change_code_from_broker():
-    connection = await aio_pika.connect_robust(url=settings.broker_settings.broker_full_url)
+    async def get_password_change_code_from_broker(self):
+        """Код смены пароля и временный пароль из RabbitMQ"""
+        connection = await aio_pika.connect_robust(url=self.broker_url)
 
-    queue_name = "change_password_codes"
+        queue_name = "change_password_codes"
 
-    async with connection:
-        channel = await connection.channel()
+        async with connection:
+            channel = await connection.channel()
 
-        await channel.set_qos(prefetch_count=5)
+            await channel.set_qos(prefetch_count=5)
 
-        queue = await channel.declare_queue(queue_name)
-        try:
-            incoming_message = await queue.get(timeout=5)
-            await incoming_message.ack()
-            return incoming_message.body
-        except QueueEmpty:
-            return None
+            queue = await channel.declare_queue(queue_name)
+            try:
+                incoming_message = await queue.get(timeout=5)
+                await incoming_message.ack()
+                return incoming_message.body
+            except QueueEmpty:
+                return None
