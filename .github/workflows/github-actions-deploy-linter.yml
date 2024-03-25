@@ -33,4 +33,4 @@ jobs:
       - name: Build docker container
         run: docker-compose up -d
       - name: Check code by linter
-        run: docker exec user ruff check
+        run: docker exec smtp ruff check
