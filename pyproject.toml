@@ -20,3 +20,7 @@ jinja2 = "^3.1.3"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff]
+exclude = ["usr", "venv", "tmp", "var"]
