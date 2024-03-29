@@ -11,10 +11,29 @@ services:
       - "5000:5000"
     networks:
       - rabbit
+    develop:
+      watch:
+        - action: sync
+          path: src/
+          target: src/
+
+        - action: sync
+          path: ./
+          target: ./
+          ignore:
+            - src/
+            - .idea
+            - .venv
+            - .gitignore
+            - README.md
+            - docker-compose.yml
+            - Dockerfile
+            - poetry.lock
+            - pyproject.toml
+
+        - action: rebuild
+          path: pyproject.toml
 
 networks:
     rabbit:
       external: true
-
-volumes:
-  database:

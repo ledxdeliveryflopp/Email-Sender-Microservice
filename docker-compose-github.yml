@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+
+  vault:
+      image: library/vault:1.13.3
+      container_name: vault
+      cap_add:
+          - IPC_LOCK
+      volumes:
+        - ./vault/config:/vault/config
+        - ./vault/policies:/vault/policies
+      command: >
+            sh -c "vault server -config=/vault/config/vault-config.json"
+      ports:
+        - "8200:8200/tcp"
+      networks:
+        - vault
+
+ authorization_app:
+    container_name: authorization
+    build:
+      ./
+    command: uvicorn main:authorization --host 0.0.0.0 --port 7000
+    ports:
+      - "7000:7000"
+    networks:
+      - sql
+      - vault
+      - nginx
+      - rabbit
+
+networks:
+    sql:
+      external: true
+    vault:
+      external: true
+    nginx:
+      external: true
+    rabbit:
+      external: true
