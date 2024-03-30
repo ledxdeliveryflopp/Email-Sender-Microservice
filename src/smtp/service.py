@@ -11,7 +11,8 @@ from src.settings.settings import settings
 class SMTPEmailService:
     broker: BrokerService
 
-    async def create_template(self, sender_email: str, user_email: str):
+    @staticmethod
+    async def create_template(sender_email: str, user_email: str) -> MIMEMultipart:
         """Создание html шаблона"""
         with open("src/smtp/templates/user_register.html", "r") as file:
             template_str = file.read()
@@ -25,7 +26,7 @@ class SMTPEmailService:
         msg.attach(MIMEText(email_content, "html"))
         return msg
 
-    async def send_message(self):
+    async def send_message(self) -> None:
         """Отправка сообщения о регистрации"""
         smtp_email = settings.smtp_settings.smtp_email_sender
 
