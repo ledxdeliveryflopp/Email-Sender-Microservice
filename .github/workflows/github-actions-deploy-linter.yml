@@ -16,7 +16,7 @@ jobs:
       - name: Build docker rabbit network
         run: docker network create rabbit
       - name: Build docker container
-        run: docker-compose up -d
+        run: docker-compose -f docker-compose-github.yml up -d --build
       - name: Check running containers
         run: docker ps -a
 
@@ -29,6 +29,6 @@ jobs:
       - name: Build docker rabbit network
         run: docker network create rabbit
       - name: Build docker container
-        run: docker-compose up -d
+        run: docker-compose -f docker-compose-github.yml up -d --build
       - name: Check code by linter
         run: docker exec smtp ruff check
