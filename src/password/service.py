@@ -12,8 +12,9 @@ from src.settings.settings import settings
 class PasswordEmailService:
     broker: BrokerService
 
-    async def create_change_password_template(self, sender_email: str, user_email: str, code: str,
-                                              password: str):
+    @staticmethod
+    async def create_change_password_template(sender_email: str, user_email: str, code: str,
+                                              password: str) -> MIMEMultipart:
         """Создание html шаблона"""
         with open("src/password/templates/change_password.html", "r") as file:
             template_str = file.read()
@@ -30,7 +31,7 @@ class PasswordEmailService:
         msg.attach(MIMEText(email_content, "html"))
         return msg
 
-    async def send_password_change_code(self):
+    async def send_password_change_code(self) -> None:
         """Отправка сообщения на почту"""
         smtp_email = settings.smtp_settings.smtp_email_sender
 
