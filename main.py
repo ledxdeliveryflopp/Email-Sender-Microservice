@@ -7,11 +7,13 @@ from src.smtp.service import SMTPEmailService
 
 
 async def send():
+    """Отправка сообщения при регистрации"""
     sender = SMTPEmailService(broker=BrokerService(broker_url=settings.broker_settings.broker_full_url))
     await sender.send_message()
 
 
 async def send_verify_code():
+    """Отправка сообщения при запросе смены пароля"""
     sender = PasswordEmailService(broker=BrokerService(broker_url=settings.broker_settings.broker_full_url))
     await sender.send_password_change_code()
 
